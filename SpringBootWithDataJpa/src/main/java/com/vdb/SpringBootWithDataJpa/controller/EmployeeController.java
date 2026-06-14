@@ -105,10 +105,29 @@ public class EmployeeController {
 
     // sort by salary
     @GetMapping("/sortbysalary")
-    public ResponseEntity<List<Employee>> sortBySalary()
-    {
+    public ResponseEntity<List<Employee>> sortBySalary() {
         return ResponseEntity.ok(iEmployeeService.findAll().stream().sorted(Comparator.comparing(Employee::getEmpSalary)).toList());
     }
+
+
+    // patch mapping
+    @PatchMapping("/changename/{empId/}{empName}")
+    public ResponseEntity<Employee> ChangeEmpName(@PathVariable long empId, @PathVariable String empName) {
+
+        Employee employee = iEmployeeService.findByEmpId(empId).orElseThrow(() -> new RecordNotFoundException("Employee Not Found"));
+
+        employee.setEmpName(empName);
+
+        return ResponseEntity.ok(iEmployeeService.update(employee));
+    }
+
+    // sort in descending order
+
+    @GetMapping("/sortbysalarydesc")
+    public ResponseEntity<List<Employee>> sortBySalaryInDesc() {
+        return ResponseEntity.ok(iEmployeeService.findAll().stream().sorted(Comparator.comparing(Employee::getEmpSalary).reversed()).toList());
+    }
+
 
     @DeleteMapping("/deletebyid/{empId}")
     public ResponseEntity<String> deleteByEmpId(@PathVariable long empId) {
