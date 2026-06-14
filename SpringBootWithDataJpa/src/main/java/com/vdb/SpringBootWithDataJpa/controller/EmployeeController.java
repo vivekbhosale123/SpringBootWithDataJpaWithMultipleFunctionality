@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,6 +103,12 @@ public class EmployeeController {
         );
     }
 
+    // sort by salary
+    @GetMapping("/sortbysalary")
+    public ResponseEntity<List<Employee>> sortBySalary()
+    {
+        return ResponseEntity.ok(iEmployeeService.findAll().stream().sorted(Comparator.comparing(Employee::getEmpSalary)).toList());
+    }
 
     @DeleteMapping("/deletebyid/{empId}")
     public ResponseEntity<String> deleteByEmpId(@PathVariable long empId) {
